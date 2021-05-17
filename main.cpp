@@ -3,7 +3,7 @@
 #include <math.h>
 #include <string>
 #include <conio.h>
-//#include "histogram.h"
+#include "histogram.h"
 
 
 using namespace std;
