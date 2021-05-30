@@ -162,24 +162,39 @@ void show_histogram_svg( const vector<double>& bins,double val_sign) {
         }
     }
 
-     double bin_size=val_sign;
-     string str;
-     int i = 0;
+    double bin_size=val_sign;
+    string str;
+    int i = 0;
+    int sum=0;
+    double sr;
+    for (int i = 0; i<bin_count; i++)
+        {
+            sum=sum+bins[i];
+        }
+        sr=sum/bin_count;
 
     for (size_t bin : bins) {
         string str= to_string(val_sign);
         str.erase(4,4);
         const double bin_width = BLOCK_WIDTH * bin * scaling_factor;
         svg_text(2*TEXT_LEFT, top + TEXT_BASELINE+ top_sign, to_string(bin));
-        svg_rect(TEXT_WIDTH, top+ top_sign, bin_width, BIN_HEIGHT, "blue", "#ffeeee");
-        if (i < bin_count - 1)
-        {
-            svg_text(0, top + TEXT_BASELINE + top_sign + BIN_HEIGHT, str);
-            i++;
-        }
-        top += BIN_HEIGHT;
-        top_sign += BIN_HEIGHT;
-        val_sign = val_sign + bin_size;
+
+
+            if (bins[i] > sr) {
+                svg_rect(TEXT_WIDTH, top+ top_sign, bin_width, BIN_HEIGHT, "red", "#ffeeee");
+            }
+            if (bins[i] <= sr) {
+                svg_rect(TEXT_WIDTH, top+ top_sign, bin_width, BIN_HEIGHT, "green", "#ffeeee");
+            }
+            else if (i < bin_count - 1)
+            {
+                svg_text(0, top + TEXT_BASELINE + top_sign + BIN_HEIGHT, str);
+                i++;
+            }
+            top += BIN_HEIGHT;
+            top_sign += BIN_HEIGHT;
+            val_sign = val_sign + bin_size;
+
 
     }
     svg_end();
