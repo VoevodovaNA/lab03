@@ -1,4 +1,4 @@
-#include "histogram.h"
+#include "histogram.cpp"
 
 #include <cassert>
 #include <vector>
@@ -40,28 +40,31 @@ void test_one_number()
     assert(max == 1);
     return;
 }
-void empty_arr()
+void test_empty()
 {
-    vector<double> array(5);
-    array[0]= {};
-    double min = 0;
-    double new_min = min;
-    double max = 0;
-    find_minmax( array,min, max);
-    assert(new_min !=min  );
-    return;
+    double min=0;
+    double max=0;
+    cerr << "test" << endl;
+    find_minmax({},min,max);
 }
-void max_min()
+
+void test1()
 {
-    double max=1;
-    double min = max;
-    assert(max=min);
+    vector<double> fortest1 = {3,4,5};
+    double expected=4;
+    double e=10e-5;
+    double val = mean(fortest1);
+    assert(val - expected < e);
 }
-void bin_count_0()
+
+void test2()
 {
-    double bin_count=0;
-    assert(bin_count == 0);
+    vector<double> fortest2;
+    double expected=0;
+    double val = mean(fortest2);
+    assert(val == expected);
 }
+
 int
 main()
 {
@@ -69,8 +72,8 @@ main()
     test_negative();
     test_equal();
     test_one_number();
-    //empty_arr();
-    max_min();
-    bin_count_0();
+    test_empty();
+    test1();
+    test2();
     return 0;
 }
