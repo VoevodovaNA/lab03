@@ -9,17 +9,27 @@ vector<double> input_numbers(size_t count) {
     return result;
 }
 
-void
-find_minmax(const vector<double>& numbers, double& min, double& max) {
-    min = numbers[0];
-    max = numbers[0];
-    for (double number : numbers) {
-        if (number < min) {
-            min = number;
+void find_minmax(const vector<double>& numbers, double& min, double& max)
+{
+    if (numbers.size() == 0)
+        return;
+
+    else
+    {
+        min = numbers[0];
+        max = numbers[0];
+        for (double number : numbers)
+        {
+            if (number < min)
+            {
+                min = number;
+            }
+            if (number > max)
+            {
+                max = number;
+            }
         }
-        if (number > max) {
-            max = number;
-        }
+
     }
 }
 
@@ -125,6 +135,21 @@ double fun_sign(const vector<double> numbers,size_t bin_count )
     return val_sign;
 }
 
+
+    double mean(const vector<double>& bins) {
+    if (bins.size()==0) {
+        return 0;
+        }
+    double result;
+    double sum=0;
+    for (int i = 0; i<bins.size(); i++)
+        {
+            sum=sum+bins[i];
+        }
+        result=sum/bins.size();
+        return result;
+    }
+
 void show_histogram_svg( const vector<double>& bins,double val_sign) {
     const auto IMAGE_WIDTH = 400;
     const auto IMAGE_HEIGHT = 300;
@@ -165,14 +190,7 @@ void show_histogram_svg( const vector<double>& bins,double val_sign) {
     double bin_size=val_sign;
     string str;
     int i = 0;
-    int sum=0;
-    double sr;
-    for (int i = 0; i<bin_count; i++)
-        {
-            sum=sum+bins[i];
-        }
-        sr=sum/bin_count;
-
+    double sr = mean(bins);
     for (size_t bin : bins) {
         string str= to_string(val_sign);
         str.erase(4,4);
