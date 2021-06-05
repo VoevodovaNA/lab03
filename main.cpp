@@ -48,7 +48,7 @@ show_histogram_text(const vector<size_t> bins)
     }
     double height;
     const size_t SCREEN_WIDTH = 80;
-    const size_t MAX_ASTERISK = SCREEN_WIDTH - 3 - 1;
+    const size_t MAX_ASTERISK = SCREEN_WIDTH - 4 - 1;
     if (max_count > MAX_ASTERISK)
     {
         height = (static_cast<double>(MAX_ASTERISK) / max_count);;
