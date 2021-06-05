@@ -30,9 +30,19 @@ void svg_rect(double x, double y, double width, double height, string stroke, st
          << "' stroke='" << stroke << "' fill='" << fill << "'/>";
 }
 
-
-void show_histogram_svg( const vector<double>& bins,double val_sign)
+double fun_sign(const vector<double> numbers,size_t bin_count )
 {
+    double max, min;
+    find_minmax(numbers, min, max);
+    double bin_size = (max - min) / bin_count;
+    bin_size = round(bin_size * 100) / 100;
+    double val_sign=0;
+    val_sign = val_sign + bin_size;
+    return val_sign;
+}
+
+
+void show_histogram_svg( const vector<double>& bins,double val_sign) {
     const auto IMAGE_WIDTH = 400;
     const auto IMAGE_HEIGHT = 300;
     const auto TEXT_LEFT = 20;
@@ -73,30 +83,27 @@ void show_histogram_svg( const vector<double>& bins,double val_sign)
     string str;
     int i = 0;
     double sr = mean(bins);
-    for (size_t bin : bins)
-    {
+    for (size_t bin : bins) {
         string str= to_string(val_sign);
         str.erase(4,4);
         const double bin_width = BLOCK_WIDTH * bin * scaling_factor;
         svg_text(2*TEXT_LEFT, top + TEXT_BASELINE+ top_sign, to_string(bin));
 
 
-        if (bins[i] > sr)
-        {
-            svg_rect(TEXT_WIDTH, top+ top_sign, bin_width, BIN_HEIGHT, "red", "#ffeeee");
-        }
-        if (bins[i] <= sr)
-        {
-            svg_rect(TEXT_WIDTH, top+ top_sign, bin_width, BIN_HEIGHT, "green", "#ffeeee");
-        }
-        else if (i < bin_count - 1)
-        {
-            svg_text(0, top + TEXT_BASELINE + top_sign + BIN_HEIGHT, str);
-            i++;
-        }
-        top += BIN_HEIGHT;
-        top_sign += BIN_HEIGHT;
-        val_sign = val_sign + bin_size;
+            if (bins[i] > sr) {
+                svg_rect(TEXT_WIDTH, top+ top_sign, bin_width, BIN_HEIGHT, "red", "#ffeeee");
+            }
+            if (bins[i] <= sr) {
+                svg_rect(TEXT_WIDTH, top+ top_sign, bin_width, BIN_HEIGHT, "green", "#ffeeee");
+            }
+            else if (i < bin_count - 1)
+            {
+                svg_text(0, top + TEXT_BASELINE + top_sign + BIN_HEIGHT, str);
+                i++;
+            }
+            top += BIN_HEIGHT;
+            top_sign += BIN_HEIGHT;
+            val_sign = val_sign + bin_size;
 
 
     }
