@@ -1,4 +1,5 @@
-#include "histogram.cpp"
+#include "histogram.h"
+#include "svg.h"
 
 #include <cassert>
 #include <vector>
