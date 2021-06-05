@@ -50,6 +50,8 @@ void show_histogram_svg( const vector<double>& bins,double val_sign) {
     const auto TEXT_WIDTH = 50;
     const auto BIN_HEIGHT = 30;
     const auto BLOCK_WIDTH = 10;
+    const size_t SCREEN_WIDTH = 80;
+    const size_t MAX_ASTERISK = SCREEN_WIDTH - 4 - 1;
     double top = 0;
     svg_begin(IMAGE_WIDTH, IMAGE_HEIGHT);
     double top_sign=0;
