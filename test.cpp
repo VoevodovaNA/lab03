@@ -51,18 +51,18 @@ void test_empty()
 
 void test1()
 {
-    vector<double> fortest1 = {3,4,5};
-    double expected=4;
+    vector<size_t> fortest1 = {3,4,5};
+    size_t expected=4;
     double e=10e-5;
-    double val = mean(fortest1);
+    size_t val = mean(fortest1);
     assert(val - expected < e);
 }
 
 void test2()
 {
-    vector<double> fortest2;
-    double expected=0;
-    double val = mean(fortest2);
+    vector<size_t> fortest2;
+    size_t expected=0;
+    size_t val = mean(fortest2);
     assert(val == expected);
 }
 
