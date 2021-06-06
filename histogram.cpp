@@ -20,20 +20,18 @@ void find_minmax(const vector<double>& numbers, double& min, double& max)
                 max = number;
             }
         }
-
     }
 }
 
-double mean(const vector<double>& bins) {
-    if (bins.size()==0) {
+double mean(const vector<size_t>& bins) {
+    if (bins.size()==0)
         return 0;
-        }
     double result;
     double sum=0;
-    for (int i = 0; i<bins.size(); i++)
-        {
-            sum=sum+bins[i];
-        }
-        result=sum/bins.size();
-        return result;
+    for (size_t i = 0; i<bins.size(); i++)
+    {
+        sum = sum + (double)(bins[i]);
     }
+    result=sum/((double)(bins.size()));
+    return result;
+}
