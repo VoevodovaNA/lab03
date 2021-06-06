@@ -29,7 +29,6 @@ void svg_rect(double x, double y, double width, double height, string stroke, st
     cout << "<rect x='" << x << "' y='" << y << "' width='" << width << "' height='" << height
          << "' stroke='" << stroke << "' fill='" << fill << "'/>";
 }
-
 double fun_sign(const vector<double> numbers,size_t bin_count )
 {
     double max, min;
@@ -41,8 +40,8 @@ double fun_sign(const vector<double> numbers,size_t bin_count )
     return val_sign;
 }
 
-
-void show_histogram_svg( const vector<double>& bins,double val_sign) {
+void show_histogram_svg(const vector<double>& bins,double val_sign)
+{
     const auto IMAGE_WIDTH = 400;
     const auto IMAGE_HEIGHT = 300;
     const auto TEXT_LEFT = 20;
@@ -51,63 +50,83 @@ void show_histogram_svg( const vector<double>& bins,double val_sign) {
     const auto BIN_HEIGHT = 30;
     const auto BLOCK_WIDTH = 10;
     const size_t SCREEN_WIDTH = 80;
-    const size_t MAX_ASTERISK = SCREEN_WIDTH - 4 - 1;
-    double top = 0;
+    const size_t MAX_ASTERISK = SCREEN_WIDTH - 3 - 1;
+
     svg_begin(IMAGE_WIDTH, IMAGE_HEIGHT);
-    double top_sign=0;
-    double scaling_factor=0;
-    size_t bin_count = bins.size();
-    size_t max_count = 0,k;
-    const auto MAX_WIDTH = IMAGE_WIDTH - TEXT_WIDTH;
-    for (size_t i = 0; i < bin_count; i++)
-    {
-        k = bins[i] * BLOCK_WIDTH;
-        if (k > MAX_WIDTH)
+
+    double top = 0;
+
+    size_t max_count = 0;
+   /* string stroke;
+    string fill;
+    double sr = mean(bins);
+    for (int i=0; i < bins.size(); i++){
+        if (bins[i]<=sr)
         {
-            max_count = k;
+            stroke="green";
+            fill="green";
+        }
+        if (bins[i]>sr)
+        {
+            stroke="red";
+            fill="red";
         }
     }
-
-
-    for (size_t i = 0; i < bin_count; i++)
-    {
-        if (max_count > MAX_WIDTH)
+    */
+    for (double count : bins)
         {
-            scaling_factor = (static_cast<double>(MAX_WIDTH) / max_count);
+        if (count > max_count)
+            max_count = count;
         }
+
+        const bool scaling_needed = max_count > MAX_ASTERISK;
+
+        if (scaling_needed)
+        {
+            const double scaling_factor = (double)MAX_ASTERISK / max_count;
+
+            for (double bin : bins)
+            {
+                    auto  height = (double)(bin * scaling_factor);
+                    const double bin_width = BLOCK_WIDTH * height;
+                    svg_text(TEXT_LEFT, top + TEXT_BASELINE, to_string(bin));
+                    double sr = mean(bins);
+                    for (int i=0; i < bins.size(); i++){
+                        if (bins[i]<=sr)
+                        {
+                            svg_rect(TEXT_WIDTH, top, bin_width, BIN_HEIGHT, "green", "#ffeeee");
+                        }
+                        else if (bins[i]>sr)
+                        {
+                            svg_rect(TEXT_WIDTH, top, bin_width, BIN_HEIGHT, "red", "#ffeeee");
+                        }
+                    }
+                    top += BIN_HEIGHT;
+            }
+
+        }
+
         else
         {
-            scaling_factor = 1;
-        }
-    }
-
-    double bin_size=val_sign;
-    string str;
-    int i = 0;
-    double sr = mean(bins);
-    for (size_t bin : bins) {
-        string str= to_string(val_sign);
-        str.erase(4,4);
-        const double bin_width = BLOCK_WIDTH * bin * scaling_factor;
-        svg_text(2*TEXT_LEFT, top + TEXT_BASELINE+ top_sign, to_string(bin));
-
-
-            if (bins[i] > sr) {
-                svg_rect(TEXT_WIDTH, top+ top_sign, bin_width, BIN_HEIGHT, "red", "#ffeeee");
-            }
-            if (bins[i] <= sr) {
-                svg_rect(TEXT_WIDTH, top+ top_sign, bin_width, BIN_HEIGHT, "green", "#ffeeee");
-            }
-            else if (i < bin_count - 1)
+            for (double bin : bins)
             {
-                svg_text(0, top + TEXT_BASELINE + top_sign + BIN_HEIGHT, str);
-                i++;
+                    const double bin_width = BLOCK_WIDTH * bin;
+                    svg_text(TEXT_LEFT, top + TEXT_BASELINE, to_string(bin));
+                    double sr = mean(bins);
+                    for (int i=0; i < bins.size(); i++){
+                        if (bins[i]<=sr)
+                        {
+                            svg_rect(TEXT_WIDTH, top, bin_width, BIN_HEIGHT, "green", "#ffeeee");
+                        }
+                        else if (bins[i]>sr)
+                        {
+                            svg_rect(TEXT_WIDTH, top, bin_width, BIN_HEIGHT, "red", "#ffeeee");
+                        }
+                    }
+                    top += BIN_HEIGHT;
             }
-            top += BIN_HEIGHT;
-            top_sign += BIN_HEIGHT;
-            val_sign = val_sign + bin_size;
 
+        }
 
-    }
     svg_end();
 }
