@@ -54,6 +54,16 @@ write_data(void* items, size_t item_size, size_t item_count, void* ctx) {
     return data_size;
 }
 
+int progress_callback(void *clientp,   double dltotal,   double dlnow,   double ultotal,   double ulnow){
+    double result;
+    result=100*dlnow/dltotal;
+    if (dltotal=0) {
+        cerr << "0%" << endl;
+    }
+    cerr << "progress: " << result << "%" << endl;
+    return CURL_PROGRESSFUNC_CONTINUE;
+}
+
 Input
 download(const string& address) {
 
@@ -66,6 +76,8 @@ download(const string& address) {
         curl_easy_setopt(curl, CURLOPT_URL, address.c_str());
         curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_data);
         curl_easy_setopt(curl, CURLOPT_WRITEDATA, &buffer);
+        curl_easy_setopt(curl, CURLOPT_PROGRESSFUNCTION, progress_callback);
+        curl_easy_setopt(curl, CURLOPT_NOPROGRESS, 0);
         res = curl_easy_perform(curl);
         curl_easy_cleanup(curl);
 
@@ -75,17 +87,7 @@ download(const string& address) {
             exit(1);
         }
 
-        else
-        {
-            curl_off_t dl;
-            res = curl_easy_getinfo (curl, CURLINFO_SIZE_DOWNLOAD_T, & dl);
 
-            if (! res)
-            {
-                cerr << "the size of the file uploaded over the network: " << dl << " bytes" << "\n";
-            }
-
-        }
     }
 
     return read_input(buffer, false);
